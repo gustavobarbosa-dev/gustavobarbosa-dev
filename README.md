@@ -34,11 +34,15 @@
   </tr>
 </table>
 
+</table>
+
 ---
 
 <h2 align="center"> 📂 ACTIVE_OPERATIONS [RECENT_PROJECTS] </h2>
 
 ---
+
+<details>
 
 <details>
   <summary><b style="color: #00FF00; font-size: 18px; cursor: pointer;">>_ EXPANDIR_DIAGNÓSTICO_DE_SISTEMA (ESTATÍSTICAS)</b></summary>
