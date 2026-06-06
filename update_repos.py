@@ -1,9 +1,12 @@
 import urllib.request
 import json
 import os
+import sys
 
 USERNAME = "gustavobarbosa-dev"
 API_URL = f"https://api.github.com/users/{USERNAME}/repos?sort=created&direction=desc"
+# Importa o token de segurança para saltar o bloqueio de Rate Limit
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 BADGE_COLORS = {
     "Python": "3776AB",
@@ -15,18 +18,22 @@ BADGE_COLORS = {
 }
 
 def fetch_latest_repos():
-    req = urllib.request.Request(API_URL, headers={'User-Agent': 'Mozilla/5.0'})
+    req = urllib.request.Request(API_URL)
+    req.add_header('User-Agent', 'Mozilla/5.0')
+    if GITHUB_TOKEN:
+        req.add_header('Authorization', f'token {GITHUB_TOKEN}')
+        
     try:
         with urllib.request.urlopen(req) as response:
             repos = json.loads(response.read().decode())
         return [r for r in repos if not r['fork'] and r['name'] != USERNAME][:4]
     except Exception as e:
-        print(f"ERROR: Falha de conexão com a API: {e}")
+        print(f"ERROR: Falha de ligação à API: {e}")
         return []
 
 def generate_html_table(repos):
     if not repos:
-        return "<p align='center' style='color: #FF0000;'>[FALHA_NO_LINK_DE_DADOS]</p>"
+        return "<p align='center' style='color: #FF0000;'>[FALHA_NO_LINK_DE_DADOS: Sem repositórios encontrados]</p>"
 
     html = '<table align="center" style="width: 100%; text-align: left; border: 1px solid #00FF00;">\n'
     html += '  <tr style="color: #00FF00; background-color: #002200;">\n'
@@ -36,7 +43,7 @@ def generate_html_table(repos):
         op_code = f"OP_0{i+1}"
         name = repo['name']
         url = repo['html_url']
-        desc = repo['description'] or "Missão confidencial. Sem briefing cadastrado no banco de dados do GitHub."
+        desc = repo['description'] or "Missão confidencial. Sem briefing cadastrado no sistema."
         lang = repo['language'] or "N/A"
         
         color = BADGE_COLORS.get(lang, "555555")
@@ -60,12 +67,12 @@ def generate_html_table(repos):
 def update_readme(html_content):
     filename = 'README.md'
     if not os.path.exists(filename):
-        print(f"CRITICAL ERROR: {filename} não localizado.")
-        return
+        print(f"CRITICAL ERROR: {filename} não localizado na raiz.")
+        sys.exit(1) # Interrompe a Action com erro vermelho
 
     with open(filename, 'r', encoding='utf-8') as file:
         readme = file.read()
-      
+
     start_marker = ""
     end_marker = ""
 
@@ -73,8 +80,8 @@ def update_readme(html_content):
     end_idx = readme.find(end_marker)
 
     if start_idx == -1 or end_idx == -1 or start_idx >= end_idx:
-        print("CRITICAL ERROR: Marcadores ausentes no README.md.")
-        return
+        print("CRITICAL ERROR: Marcadores HTML ausentes no README.md.")
+        sys.exit(1) # Interrompe a Action com erro vermelho
 
     before_section = readme[:start_idx + len(start_marker)]
     after_section = readme[end_idx:]
@@ -84,11 +91,11 @@ def update_readme(html_content):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(new_readme)
         
-    print("SYS_LOG: README.md atualizado com sucesso.")
+    print("SYS_LOG: README.md injetado e atualizado com sucesso.")
 
 if __name__ == "__main__":
-    print("STATUS: Iniciando extração de dados...")
+    print("STATUS: Iniciando extração de dados da API...")
     repos = fetch_latest_repos()
     html_table = generate_html_table(repos)
     update_readme(html_table)
-    print("STATUS: Operação finalizada.")
+    print("STATUS: Operação local finalizada.")
