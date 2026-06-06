@@ -1,0 +1,45 @@
+name: System Sync (Matrix & Python)
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Update Active Operations Table
+        run: python update_repos.py
+
+      - name: Generate 3D Profile Matrix
+        uses: yoshi389111/github-profile-3d-contrib@0.7.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ github.repository_owner }}
+
+      - name: Generate Snake Data Stream
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-snake-dark.svg?palette=github-dark&color_snake=#00FF00&color_dots=#0a190f,#004400,#008800,#00cc00,#00ff00
+
+      - name: Commit All Changes to Mainframe
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: System-Bot
+          author_email: actions@github.com
+          message: "sys.log: atualização do readme, matriz 3d e telemetria"
+          add: "README.md dist/* profile-3d-contrib/*"
