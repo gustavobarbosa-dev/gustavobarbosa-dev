@@ -21,6 +21,8 @@ jobs:
           python-version: '3.x'
           
       - name: Update Active Operations Table
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # ← INJEÇÃO DE SEGURANÇA AQUI
         run: python update_repos.py
 
       - name: Generate 3D Profile Matrix
@@ -41,5 +43,5 @@ jobs:
         with:
           author_name: System-Bot
           author_email: actions@github.com
-          message: "sys.log: atualização do readme, matriz 3d e telemetria"
-          add: "README.md dist/* profile-3d-contrib/*"
+          message: "sys.log: atualização automática do mainframe (readme/tabelas/matriz)"
+          add: "." # ← FORÇA A GRAVAR QUALQUER ALTERAÇÃO FEITA
