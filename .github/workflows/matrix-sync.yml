@@ -1,4 +1,4 @@
-name: System Sync (Matrix & Python)
+name: Profile Sync
 
 on:
   schedule:
@@ -12,36 +12,36 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-          
-      - name: Update Active Operations Table
+
+      - name: Update projects table
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # ← INJEÇÃO DE SEGURANÇA AQUI
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python update_repos.py
 
-      - name: Generate 3D Profile Matrix
+      - name: Generate 3D contribution graph
         uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
 
-      - name: Generate Snake Data Stream
+      - name: Generate contribution snake
         uses: Platane/snk/svg-only@v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
-            dist/github-snake-dark.svg?palette=github-dark&color_snake=#00FF00&color_dots=#0a190f,#004400,#008800,#00cc00,#00ff00
+            dist/github-snake-dark.svg?palette=github-dark
 
-      - name: Commit All Changes to Mainframe
+      - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          author_name: System-Bot
+          author_name: github-actions
           author_email: actions@github.com
-          message: "sys.log: atualização automática do mainframe (readme/tabelas/matriz)"
-          add: "." # ← FORÇA A GRAVAR QUALQUER ALTERAÇÃO FEITA
+          message: "chore: update profile README (projects, graph, snake)"
+          add: "."

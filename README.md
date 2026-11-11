@@ -16,7 +16,7 @@ const gustavo = {
   role: "Fullstack Developer",
   focus: ["backend architecture", "data analysis", "game logic"],
   principle: "turn complex logic into systems that are simple to reason about",
-  status: "building",
+  currently: "shipping and refining personal projects",
 };
 ```
 
@@ -28,11 +28,30 @@ const gustavo = {
   <img src="https://skillicons.dev/icons?i=py,ts,js,react,nodejs,html,css,docker,linux,git,github,vscode&theme=dark&perline=6" alt="Stack" />
 </div>
 
-## Activity
+## Projects
+
+<!-- PROJECTS:START -->
+_No public repositories to list yet._
+<!-- PROJECTS:END -->
+
+## Metrics
+
+<table align="center">
+  <tr>
+    <td>
+      <img src="https://github-readme-stats.vercel.app/api?username=gustavobarbosa-dev&show_icons=true&hide_border=true&bg_color=0D1117&title_color=E6EDF3&text_color=8B949E&icon_color=3B82F6" alt="GitHub stats" />
+    </td>
+    <td>
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=gustavobarbosa-dev&layout=compact&hide_border=true&bg_color=0D1117&title_color=E6EDF3&text_color=8B949E&langs_count=8" alt="Top languages" />
+    </td>
+  </tr>
+</table>
 
 <div align="center">
-  <img src="https://streak-stats.demolab.com/?user=gustavobarbosa-dev&hide_border=true&background=0D1117&ring=3B82F6&fire=3B82F6&currStreakNum=E6EDF3&sideNums=E6EDF3&currStreakLabel=8B949E&sideLabels=8B949E&dates=6E7681" height="190" alt="GitHub Streak Stats" />
+  <img src="https://streak-stats.demolab.com/?user=gustavobarbosa-dev&hide_border=true&background=0D1117&ring=3B82F6&fire=3B82F6&currStreakNum=E6EDF3&sideNums=E6EDF3&currStreakLabel=8B949E&sideLabels=8B949E&dates=6E7681" height="190" alt="GitHub streak stats" />
 </div>
+
+## Activity
 
 <div align="center">
   <img src="profile-3d-contrib/profile-green-animate.svg" alt="Contribution graph" width="800" />
